@@ -3,9 +3,10 @@ package io.github.fbiville.nestedrelationquerysdn6;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
 import org.springframework.data.neo4j.core.schema.Relationship;
+import org.springframework.data.neo4j.core.schema.Relationship.Direction;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 @Node(primaryLabel = "Changeset")
 public class Changeset extends HypercubeNode {
@@ -13,22 +14,22 @@ public class Changeset extends HypercubeNode {
     @Property("USER")
     private String user;
 
-    @Relationship(type = "CHANGESET_IN")
-    private Map<Workspace, ChangesetIn> changesetIn = new HashMap<>();
+    @Relationship(type = "CHANGESET_IN", direction = Direction.OUTGOING)
+    private List<ChangesetIn> changesetIns = new ArrayList<>();
 
-    public String getUser() {
+    public List<ChangesetIn> getChangesetIns() {
+		return changesetIns;
+	}
+
+	public void setWorkspaces(List<ChangesetIn> changesetIns) {
+		this.changesetIns = changesetIns;
+	}
+
+	public String getUser() {
         return user;
     }
 
     public void setUser(String user) {
         this.user = user;
-    }
-
-    public Map<Workspace, ChangesetIn> getChangesetIn() {
-        return changesetIn;
-    }
-
-    public void setChangesetIn(Map<Workspace, ChangesetIn> changesetIn) {
-        this.changesetIn = changesetIn;
     }
 }
